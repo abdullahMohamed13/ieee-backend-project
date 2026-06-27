@@ -80,28 +80,28 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div class="text-center">
                         <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i data-lucide="award" class="w-8 h-8 text-blue-900"></i>
+                            <img src="/icons/dollar.png" />
                         </div>
                         <h3 class="font-semibold text-lg text-gray-900 mb-2">Best Price Guarantee</h3>
                         <p class="text-gray-600 text-sm">Find the lowest prices or we'll refund the difference</p>
                     </div>
                     <div class="text-center">
                         <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i data-lucide="shield" class="w-8 h-8 text-blue-900"></i>
+                            <img src="/icons/booking.png" />
                         </div>
                         <h3 class="font-semibold text-lg text-gray-900 mb-2">Secure Booking</h3>
                         <p class="text-gray-600 text-sm">Your information is protected with 256-bit encryption</p>
                     </div>
                     <div class="text-center">
                         <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i data-lucide="headphones" class="w-8 h-8 text-blue-900"></i>
+                            <img src="/icons/hotel-bell.png" />
                         </div>
                         <h3 class="font-semibold text-lg text-gray-900 mb-2">24/7 Support</h3>
                         <p class="text-gray-600 text-sm">Our team is here to help you anytime, anywhere</p>
                     </div>
                     <div class="text-center">
                         <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i data-lucide="star" class="w-8 h-8 text-blue-900"></i>
+                            <img src="/icons/check.png" />
                         </div>
                         <h3 class="font-semibold text-lg text-gray-900 mb-2">Premium Selection</h3>
                         <p class="text-gray-600 text-sm">Handpicked luxury hotels and exclusive properties</p>
