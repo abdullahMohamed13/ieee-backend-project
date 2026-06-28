@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
@@ -36,8 +37,15 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/hotels', [AdminController::class, 'hotels'])->name('admin.hotels');
-    Route::get('/admin/rooms', [AdminController::class, 'rooms'])->name('admin.rooms');
-    Route::get('/admin/bookings', [AdminController::class, 'bookings'])->name('admin.bookings');
+
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/hotels', [AdminController::class, 'hotels'])->name('hotels');
+        Route::get('/rooms', [AdminController::class, 'rooms'])->name('rooms');
+        Route::get('/bookings', [AdminController::class, 'bookings'])->name('bookings');
+
+        Route::resource('hotels/{hotel}/rooms', RoomController::class)
+            ->names('rooms')
+            ->except(['show']);
+    });
 });
