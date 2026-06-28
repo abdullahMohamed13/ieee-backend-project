@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hotel;
+
 class HomeController extends Controller
 {
     public function index()
     {
-        $hotels = (new HotelsController)->getHotels();
-        $featuredHotels = collect($hotels)->where('featured', true)->values()->all();
+        $hotels = Hotel::all();
+        $featuredHotels = $hotels->where('featured', true)->values()->all();
 
         $popularDestinations = [
             ['id' => 'd1', 'name' => 'New York', 'hotels' => 156, 'image' => 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800'],

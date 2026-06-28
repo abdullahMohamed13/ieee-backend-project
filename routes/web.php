@@ -12,8 +12,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
+//hotel routes
 Route::get('/hotels', [HotelsController::class, 'index'])->name('hotels.index');
+Route::get('/hotels/create', [HotelsController::class, 'create'])->name('hotels.create');
+Route::post('/hotels', [HotelsController::class, 'store'])->name('hotels.store');
 Route::get('/hotels/{id}', [HotelsController::class, 'show'])->name('hotels.show');
+
 
 Route::get('/booking/{id}', [BookingController::class, 'create'])->name('booking.create');
 Route::post('/booking/{id}', [BookingController::class, 'store'])->name('booking.store');

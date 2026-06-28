@@ -26,7 +26,6 @@ class HotelsController extends Controller
         return view('hotels.index', compact('hotels'));
     }   
 
-    
 
     public function show($id)
     {
@@ -39,5 +38,31 @@ class HotelsController extends Controller
             'rooms' => $rooms,
             'reviews' => $reviews,
         ]);
+    }
+
+    public function create()
+    {
+        return view('hotels.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'rating' => 'nullable|integer|min:1|max:5',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('hotels', 'public');
+        }
+
+        Hotel::create($validated);
+
+        return redirect()
+            ->route('hotels.index')
+            ->with('success', 'Hotel created successfully.');
     }
 }
