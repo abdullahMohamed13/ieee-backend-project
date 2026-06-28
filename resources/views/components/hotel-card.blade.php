@@ -14,7 +14,7 @@
     {{-- Image --}}
     <div class="relative h-48 overflow-hidden">
         <img
-            src="{{ $hotel['image'] ?? $hotel->image }}"
+            src="{{ Str::startsWith($hotel['image'] ?? $hotel->image ?? '', ['http://', 'https://']) ? ($hotel['image'] ?? $hotel->image) : asset('storage/' . ($hotel['image'] ?? $hotel->image)) }}"
             alt="{{ $hotel['name'] ?? $hotel->name }}"
             class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
         />
@@ -79,5 +79,23 @@
             </div>
             <x-button href="{{ url('/hotels/' . ($hotel['id'] ?? $hotel->id)) }}" size="sm">View Details</x-button>
         </div>
+
+        {{-- admin control to edit and delete hotel --}}
+        @if(auth()->check() && auth()->user()->is_admin)
+        <div class="flex justify-end items-center space-x-4 pt-3 mt-3 border-t border-gray-100">
+            <a href="{{ route('hotels.edit', $hotel['id'] ?? $hotel->id) }}" 
+               class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center">
+                <i data-lucide="edit-2" class="w-4 h-4 mr-1"></i> Edit
+            </a>
+            
+            <form action="{{ route('hotels.destroy', $hotel['id'] ?? $hotel->id) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this hotel?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-800 flex items-center">
+                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
+                </button>
+            </form>
+        </div>
+        @endif
     </div>
 </div>

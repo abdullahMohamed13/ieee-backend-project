@@ -52,17 +52,68 @@ class HotelsController extends Controller
             'address' => 'required|string|max:255',
             'description' => 'nullable|string',
             'rating' => 'nullable|integer|min:1|max:5',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ]);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('hotels', 'public');
+            $validated['image'] = $request->file('image')->store('uploads/hotels', 'public');
         }
+
+        
 
         Hotel::create($validated);
 
         return redirect()
             ->route('hotels.index')
             ->with('success', 'Hotel created successfully.');
+    }
+
+    public function edit($id)
+    {
+        $hotel = Hotel::findOrFail($id);
+        
+        return view('hotels.edit', compact('hotel'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $hotel = Hotel::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'rating' => 'nullable|integer|min:1|max:5',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $data = $request->only(['name', 'address', 'description', 'rating']);
+
+        if ($request->hasFile('image')) {
+            
+            if ($hotel->image && file_exists(storage_path('app/public/' . $hotel->image))) {
+                @unlink(storage_path('app/public/' . $hotel->image));
+            }
+
+            $imagePath = $request->file('image')->store('uploads/hotels', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        $hotel->update($data);
+
+        return redirect()->route('hotels.index')->with('success', 'Hotel updated successfully!');
+    }
+
+    public function destroy($id)
+    {
+        $hotel = Hotel::findOrFail($id);
+
+        if ($hotel->image && file_exists(storage_path('app/public/' . $hotel->image))) {
+            @unlink(storage_path('app/public/' . $hotel->image));
+        }
+
+        $hotel->delete();
+
+        return redirect()->route('hotels.index')->with('success', 'Hotel deleted successfully!');
     }
 }

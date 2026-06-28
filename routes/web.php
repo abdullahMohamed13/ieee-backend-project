@@ -17,7 +17,9 @@ Route::get('/hotels', [HotelsController::class, 'index'])->name('hotels.index');
 Route::get('/hotels/create', [HotelsController::class, 'create'])->name('hotels.create');
 Route::post('/hotels', [HotelsController::class, 'store'])->name('hotels.store');
 Route::get('/hotels/{id}', [HotelsController::class, 'show'])->name('hotels.show');
-
+Route::get('/hotels/{id}/edit', [HotelsController::class, 'edit'])->name('hotels.edit');
+Route::put('/hotels/{id}', [HotelsController::class, 'update'])->name('hotels.update');
+Route::delete('/hotels/{id}', [HotelsController::class, 'destroy'])->name('hotels.destroy');
 
 Route::get('/booking/{id}', [BookingController::class, 'create'])->name('booking.create');
 Route::post('/booking/{id}', [BookingController::class, 'store'])->name('booking.store');

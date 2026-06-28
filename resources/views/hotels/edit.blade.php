@@ -1,6 +1,5 @@
-```blade
 <x-layout>
-    <x-slot:title>Create Hotel</x-slot:title>
+    <x-slot:title>Edit Hotel - {{ $hotel->name }}</x-slot:title>
 
     <div class="py-8 bg-gray-50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,22 +17,22 @@
                 <span class="mx-2">/</span>
 
                 <span class="text-gray-900">
-                    Create Hotel
+                    Edit Hotel
                 </span>
             </div>
 
             {{-- Page Title --}}
             <h1 class="text-4xl font-bold text-gray-900 mb-8">
-                Create New Hotel
+                Edit Hotel
             </h1>
 
-            {{-- enctype is required for image upload --}}
             <form
-                action="{{ route('hotels.store') }}"
+                action="{{ route('hotels.update', $hotel->id) }}"
                 method="POST"
                 enctype="multipart/form-data"
             >
                 @csrf
+                @method('PUT')
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
@@ -61,7 +60,7 @@
                                         name="name"
                                         icon="building"
                                         placeholder="Grand Luxury Hotel"
-                                        value="{{ old('name') }}"
+                                        value="{{ old('name', $hotel->name) }}"
                                         required
                                     />
 
@@ -95,7 +94,7 @@
                                             @for($i = 1; $i <= 5; $i++)
                                                 <option
                                                     value="{{ $i }}"
-                                                    {{ old('rating') == $i ? 'selected' : '' }}>
+                                                    {{ old('rating', $hotel->rating) == $i ? 'selected' : '' }}>
                                                     {{ str_repeat('⭐', $i) }}
                                                 </option>
                                             @endfor
@@ -122,7 +121,7 @@
                                         name="address"
                                         icon="map-pin"
                                         placeholder="Hotel Address"
-                                        value="{{ old('address') }}"
+                                        value="{{ old('address', $hotel->address) }}"
                                         required
                                     />
 
@@ -139,6 +138,17 @@
                                         Hotel Image
                                     </label>
 
+                                    @if($hotel->image)
+                                        <div class="mb-4">
+                                            <p class="text-sm text-gray-600 mb-2">Current Image:</p>
+                                            <img 
+                                                src="{{ Str::startsWith($hotel->image, ['http://', 'https://']) ? $hotel->image : asset('storage/' . $hotel->image) }}" 
+                                                alt="Current Hotel Image" 
+                                                class="h-32 object-cover rounded-lg border border-gray-200"
+                                            >
+                                        </div>
+                                    @endif
+
                                     <div class="mt-1 flex justify-center px-6 py-8 border-2 border-dashed border-gray-300 rounded-lg">
 
                                         <div class="text-center">
@@ -154,8 +164,7 @@
                                                     for="image-upload"
                                                     class="cursor-pointer text-blue-900 font-medium hover:text-blue-700">
 
-                                                    Upload Image
-
+                                                    Upload New Image
                                                 </label>
 
                                                 <input
@@ -169,7 +178,7 @@
                                             </div>
 
                                             <p id="file-name" class="text-xs text-gray-500 mt-2 text-center break-all px-4">
-                                                JPG, PNG (Max 10 MB)
+                                                JPG, PNG (Max 10 MB) - Leave empty to keep current
                                             </p>
 
                                         </div>
@@ -193,7 +202,7 @@
                                         name="description"
                                         rows="5"
                                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900"
-                                        placeholder="Write hotel description...">{{ old('description') }}</textarea>
+                                        placeholder="Write hotel description...">{{ old('description', $hotel->description) }}</textarea>
 
                                     @error('description')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -215,7 +224,7 @@
                         <div class="bg-white rounded-xl shadow-lg p-6 sticky top-24">
 
                             <h3 class="text-xl font-bold text-gray-900 mb-4">
-                                Publish Hotel
+                                Update Hotel
                             </h3>
 
                             <div class="space-y-4 text-sm text-gray-600">
@@ -224,21 +233,21 @@
                                     <i data-lucide="check-circle"
                                        class="w-4 h-4 mr-2 text-green-500"></i>
 
-                                    Fill all required fields
+                                    Modify any required fields
                                 </p>
 
                                 <p class="flex items-center">
                                     <i data-lucide="check-circle"
                                        class="w-4 h-4 mr-2 text-green-500"></i>
 
-                                    Upload a hotel image
+                                    Optionally upload a new image
                                 </p>
 
                                 <p class="flex items-center">
                                     <i data-lucide="check-circle"
                                        class="w-4 h-4 mr-2 text-green-500"></i>
 
-                                    Review your information
+                                    Save your changes
                                 </p>
 
                             </div>
@@ -248,12 +257,12 @@
                                 block
                                 class="mt-8">
 
-                                Create Hotel
+                                Update Hotel
 
                             </x-button>
 
                             <p class="text-xs text-center text-gray-500 mt-4">
-                                The hotel will be added to the system after successful validation.
+                                Your changes will be saved to the database.
                             </p>
 
                         </div>
