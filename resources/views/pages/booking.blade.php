@@ -1,26 +1,4 @@
 @php
-  $allHotels = [
-    ['id'=>'1','name'=>'Grand Luxury Hotel','location'=>'Downtown, New York','price'=>299,
-     'image'=>'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800'],
-    ['id'=>'2','name'=>'Seaside Resort & Spa','location'=>'Beachfront, Miami','price'=>349,
-     'image'=>'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800'],
-    ['id'=>'3','name'=>'Mountain View Lodge','location'=>'Aspen, Colorado','price'=>189,
-     'image'=>'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800'],
-    ['id'=>'4','name'=>'City Center Hotel','location'=>'Downtown, Chicago','price'=>159,
-     'image'=>'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800'],
-    ['id'=>'5','name'=>'Desert Oasis Resort','location'=>'Scottsdale, Arizona','price'=>279,
-     'image'=>'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800'],
-    ['id'=>'6','name'=>'Historic Downtown Inn','location'=>'French Quarter, New Orleans','price'=>139,
-     'image'=>'https://images.unsplash.com/photo-1587985064135-0366536eab42?w=800'],
-    ['id'=>'7','name'=>'Coastal Paradise Hotel','location'=>'Santa Monica, California','price'=>319,
-     'image'=>'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800'],
-    ['id'=>'8','name'=>'Urban Boutique Hotel','location'=>'SoHo, New York','price'=>229,
-     'image'=>'https://images.unsplash.com/photo-1517840901100-8179e982acb7?w=800'],
-  ];
-
-  $hotelId = request()->segment(2, '1');
-  $hotel   = collect($allHotels)->firstWhere('id', $hotelId);
-
   $nights   = 3;
   $subtotal = $hotel ? $hotel['price'] * $nights : 0;
   $taxes    = round($subtotal * 0.15, 2);
@@ -43,10 +21,8 @@
           @csrf
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {{-- ── Main Form ─────────────────────────────────────────── --}}
             <div class="lg:col-span-2 space-y-6">
 
-              {{-- Guest Information --}}
               <div class="bg-white rounded-xl shadow-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Guest Information</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -99,7 +75,6 @@
                 </div>
               </div>
 
-              {{-- Booking Details --}}
               <div class="bg-white rounded-xl shadow-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Booking Details</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -156,7 +131,6 @@
                 </div>
               </div>
 
-              {{-- Payment Information --}}
               <div class="bg-white rounded-xl shadow-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Payment Information</h2>
                 <div class="grid grid-cols-1 gap-4">
@@ -193,7 +167,6 @@
               </div>
             </div>
 
-            {{-- ── Booking Summary ───────────────────────────────────── --}}
             <div class="lg:col-span-1">
               <div class="bg-white rounded-xl shadow-lg p-6 sticky top-24">
                 <h3 class="text-xl font-bold text-gray-900 mb-4">Booking Summary</h3>
@@ -238,12 +211,7 @@
                   <span class="font-bold text-lg text-gray-900">Total</span>
                   <span class="font-bold text-2xl text-blue-900">${{ $total }}</span>
                 </div>
-                <button
-                  type="submit"
-                  class="w-full bg-blue-900 text-white py-3 rounded-lg hover:bg-blue-800 transition-colors font-semibold mt-6"
-                >
-                  Confirm Booking
-                </button>
+                <x-button type="submit" variant="primary" block class="mt-6">Confirm Booking</x-button>
                 <p class="text-xs text-gray-600 text-center mt-4">
                   By confirming, you agree to our Terms &amp; Conditions
                 </p>

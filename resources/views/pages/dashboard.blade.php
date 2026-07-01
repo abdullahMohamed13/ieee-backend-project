@@ -1,31 +1,4 @@
 @php
-  // ── Mock data ─────────────────────────────────────────────────────────────
-  $bookings = [
-    ['id'=>'b1','hotelId'=>'1','hotelName'=>'Grand Luxury Hotel','roomType'=>'Deluxe King',
-     'checkIn'=>'2026-07-15','checkOut'=>'2026-07-18','guests'=>2,'totalPrice'=>897,
-     'status'=>'confirmed','userName'=>'John Smith','userEmail'=>'john.smith@example.com'],
-    ['id'=>'b2','hotelId'=>'2','hotelName'=>'Seaside Resort & Spa','roomType'=>'Ocean View Room',
-     'checkIn'=>'2026-08-01','checkOut'=>'2026-08-05','guests'=>2,'totalPrice'=>1396,
-     'status'=>'pending','userName'=>'Sarah Johnson','userEmail'=>'sarah.j@example.com'],
-    ['id'=>'b3','hotelId'=>'3','hotelName'=>'Mountain View Lodge','roomType'=>'Mountain View Room',
-     'checkIn'=>'2026-07-20','checkOut'=>'2026-07-23','guests'=>3,'totalPrice'=>567,
-     'status'=>'confirmed','userName'=>'Michael Brown','userEmail'=>'m.brown@example.com'],
-    ['id'=>'b4','hotelId'=>'7','hotelName'=>'Coastal Paradise Hotel','roomType'=>'Beach Suite',
-     'checkIn'=>'2026-09-10','checkOut'=>'2026-09-15','guests'=>4,'totalPrice'=>1595,
-     'status'=>'confirmed','userName'=>'Emily Davis','userEmail'=>'emily.d@example.com'],
-  ];
-
-  $favoriteHotels = [
-    ['id'=>'1','name'=>'Grand Luxury Hotel','location'=>'Downtown, New York','price'=>299,
-     'image'=>'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800'],
-    ['id'=>'2','name'=>'Seaside Resort & Spa','location'=>'Beachfront, Miami','price'=>349,
-     'image'=>'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800'],
-    ['id'=>'3','name'=>'Mountain View Lodge','location'=>'Aspen, Colorado','price'=>189,
-     'image'=>'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800'],
-  ];
-
-  $activeTab = request('tab', 'bookings');
-
   $statusColors = [
     'confirmed' => 'bg-green-100 text-green-800',
     'pending'   => 'bg-yellow-100 text-yellow-800',
@@ -36,6 +9,8 @@
     'pending'   => 'clock',
     'cancelled' => 'x-circle',
   ];
+
+  $user = auth()->user();
 @endphp
 
 <x-layouts.app title="My Dashboard – LuxStay" description="Manage your bookings and account settings on LuxStay.">
@@ -43,7 +18,6 @@
   <div class="py-8 bg-gray-50 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      {{-- ── Header ──────────────────────────────────────────────────── --}}
       <div class="mb-8">
         <h1 class="text-4xl font-bold text-gray-900 mb-2">My Dashboard</h1>
         <p class="text-gray-600">Manage your bookings and account settings</p>
@@ -51,19 +25,16 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-        {{-- ── Sidebar ──────────────────────────────────────────────── --}}
         <aside class="lg:col-span-1">
           <div class="bg-white rounded-xl shadow-lg p-6">
-            {{-- User Profile --}}
             <div class="text-center mb-6 pb-6 border-b">
               <div class="w-20 h-20 bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
                 <x-icon name="user" class="w-10 h-10 text-white" />
               </div>
-              <h3 class="font-semibold text-gray-900">John Smith</h3>
-              <p class="text-sm text-gray-600">john.smith@example.com</p>
+              <h3 class="font-semibold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h3>
+              <p class="text-sm text-gray-600">{{ $user->email }}</p>
             </div>
 
-            {{-- Navigation --}}
             <nav class="space-y-2">
               @foreach([
                 ['tab'=>'bookings',  'label'=>'My Bookings', 'icon'=>'calendar'],
@@ -83,10 +54,8 @@
           </div>
         </aside>
 
-        {{-- ── Main Content ─────────────────────────────────────────── --}}
         <div class="lg:col-span-3">
 
-          {{-- ─── My Bookings ─────────────────────────────────────── --}}
           @if($activeTab === 'bookings')
             <div class="space-y-6">
               <div class="bg-white rounded-xl shadow-lg p-6">
@@ -126,7 +95,6 @@
                 </div>
               </div>
 
-              {{-- Booking History Table --}}
               <div class="bg-white rounded-xl shadow-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Booking History</h2>
                 <div class="overflow-x-auto">
@@ -158,7 +126,6 @@
               </div>
             </div>
 
-          {{-- ─── Favorites ────────────────────────────────────────── --}}
           @elseif($activeTab === 'favorites')
             <div class="bg-white rounded-xl shadow-lg p-6">
               <h2 class="text-2xl font-bold text-gray-900 mb-6">Favorite Hotels</h2>
@@ -174,12 +141,7 @@
                       </div>
                       <div class="flex items-center justify-between">
                         <span class="text-xl font-bold text-blue-900">${{ $hotel['price'] }}/night</span>
-                        <a
-                          href="{{ url('/hotels/' . $hotel['id']) }}"
-                          class="bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors text-sm"
-                        >
-                          Book Now
-                        </a>
+                        <x-button href="{{ url('/hotels/' . $hotel['id']) }}" variant="primary" size="sm">Book Now</x-button>
                       </div>
                     </div>
                   </div>
@@ -187,7 +149,6 @@
               </div>
             </div>
 
-          {{-- ─── Profile ──────────────────────────────────────────── --}}
           @elseif($activeTab === 'profile')
             <div class="bg-white rounded-xl shadow-lg p-6">
               <h2 class="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
@@ -213,7 +174,7 @@
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                  <input type="tel" name="phone" value="+1 (555) 123-4567"
+                  <input type="tel" name="phone" value="+20 (101) 0434 465"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900" />
                 </div>
                 <div>
@@ -221,20 +182,15 @@
                   <textarea name="address" rows="3"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900">123 Main Street, New York, NY 10001</textarea>
                 </div>
-                <button type="submit"
-                  class="bg-blue-900 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition-colors font-semibold">
-                  Save Changes
-                </button>
+                <x-button type="submit" variant="primary">Save Changes</x-button>
               </form>
             </div>
 
-          {{-- ─── Settings ─────────────────────────────────────────── --}}
           @elseif($activeTab === 'settings')
             <div class="space-y-6">
               <div class="bg-white rounded-xl shadow-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Settings</h2>
                 <div class="space-y-6">
-                  {{-- Email Preferences --}}
                   <div>
                     <h3 class="font-semibold text-gray-900 mb-4">Email Preferences</h3>
                     <div class="space-y-3">
@@ -253,7 +209,6 @@
                     </div>
                   </div>
 
-                  {{-- Change Password --}}
                   <div class="border-t pt-6">
                     <h3 class="font-semibold text-gray-900 mb-4">Change Password</h3>
                     <form action="{{ url('/dashboard/password') }}" method="POST" class="space-y-4">
@@ -265,10 +220,7 @@
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900" />
                       <input type="password" name="password_confirmation" placeholder="Confirm new password"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900" />
-                      <button type="submit"
-                        class="bg-blue-900 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition-colors font-semibold">
-                        Update Password
-                      </button>
+                      <x-button type="submit" variant="primary">Update Password</x-button>
                     </form>
                   </div>
                 </div>

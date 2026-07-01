@@ -1,38 +1,4 @@
 @php
-  // ── Mock booking data ─────────────────────────────────────────────────────
-  $bookings = [
-    ['id'=>'b1','hotelId'=>'1','hotelName'=>'Grand Luxury Hotel','roomType'=>'Deluxe King',
-     'checkIn'=>'2026-07-15','checkOut'=>'2026-07-18','guests'=>2,'totalPrice'=>897,
-     'status'=>'confirmed','userName'=>'John Smith','userEmail'=>'john.smith@example.com'],
-    ['id'=>'b2','hotelId'=>'2','hotelName'=>'Seaside Resort & Spa','roomType'=>'Ocean View Room',
-     'checkIn'=>'2026-08-01','checkOut'=>'2026-08-05','guests'=>2,'totalPrice'=>1396,
-     'status'=>'pending','userName'=>'Sarah Johnson','userEmail'=>'sarah.j@example.com'],
-    ['id'=>'b3','hotelId'=>'3','hotelName'=>'Mountain View Lodge','roomType'=>'Mountain View Room',
-     'checkIn'=>'2026-07-20','checkOut'=>'2026-07-23','guests'=>3,'totalPrice'=>567,
-     'status'=>'confirmed','userName'=>'Michael Brown','userEmail'=>'m.brown@example.com'],
-    ['id'=>'b4','hotelId'=>'7','hotelName'=>'Coastal Paradise Hotel','roomType'=>'Beach Suite',
-     'checkIn'=>'2026-09-10','checkOut'=>'2026-09-15','guests'=>4,'totalPrice'=>1595,
-     'status'=>'confirmed','userName'=>'Emily Davis','userEmail'=>'emily.d@example.com'],
-  ];
-
-  $revenueData = [
-    ['month'=>'Jan','revenue'=>45000],
-    ['month'=>'Feb','revenue'=>52000],
-    ['month'=>'Mar','revenue'=>48000],
-    ['month'=>'Apr','revenue'=>61000],
-    ['month'=>'May','revenue'=>55000],
-    ['month'=>'Jun','revenue'=>67000],
-  ];
-
-  $bookingTrends = [
-    ['month'=>'Jan','bookings'=>142],
-    ['month'=>'Feb','bookings'=>165],
-    ['month'=>'Mar','bookings'=>138],
-    ['month'=>'Apr','bookings'=>189],
-    ['month'=>'May','bookings'=>176],
-    ['month'=>'Jun','bookings'=>208],
-  ];
-
   $statusColors = [
     'confirmed' => 'bg-green-100 text-green-800',
     'pending'   => 'bg-yellow-100 text-yellow-800',
@@ -45,58 +11,49 @@
   <div class="py-8 bg-gray-50 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      {{-- ── Header ──────────────────────────────────────────────────── --}}
       <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
           <h1 class="text-4xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
           <p class="text-gray-600">Welcome back! Here's what's happening today.</p>
         </div>
         <div class="mt-4 md:mt-0 flex space-x-4">
-          <a
-            href="{{ url('/admin/hotels') }}"
-            class="bg-blue-900 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition-colors font-semibold"
-          >
-            Manage Hotels
-          </a>
+          <x-button href="{{ url('/admin/hotels') }}" variant="primary">Manage Hotels</x-button>
         </div>
       </div>
 
-      {{-- ── Stats Grid ───────────────────────────────────────────────── --}}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <x-stat-card
           title="Total Hotels"
-          value="156"
+          value="{{ $totalHotels }}"
           icon="hotel"
           :trend="['value' => '12% increase', 'isPositive' => true]"
           color="blue"
         />
         <x-stat-card
           title="Total Rooms"
-          value="1,248"
+          value="{{ $totalRooms }}"
           icon="bed"
           :trend="['value' => '8% increase', 'isPositive' => true]"
           color="green"
         />
         <x-stat-card
           title="Total Bookings"
-          value="3,842"
+          value="{{ $totalBookings }}"
           icon="calendar"
           :trend="['value' => '23% increase', 'isPositive' => true]"
           color="purple"
         />
         <x-stat-card
           title="Revenue"
-          value="$428K"
+          value="${{ number_format($totalRevenue) }}"
           icon="dollar-sign"
           :trend="['value' => '15% increase', 'isPositive' => true]"
           color="orange"
         />
       </div>
 
-      {{-- ── Charts (pure HTML/CSS bar simulation) ──────────────────── --}}
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
 
-        {{-- Revenue Chart --}}
         <div class="bg-white rounded-xl shadow-lg p-6">
           <h3 class="text-xl font-bold text-gray-900 mb-6">Monthly Revenue</h3>
           <div class="flex items-end justify-between h-48 gap-2">
@@ -115,7 +72,6 @@
           </div>
         </div>
 
-        {{-- Booking Trends Chart --}}
         <div class="bg-white rounded-xl shadow-lg p-6">
           <h3 class="text-xl font-bold text-gray-900 mb-6">Booking Trends</h3>
           <div class="flex items-end justify-between h-48 gap-2">
@@ -136,7 +92,6 @@
 
       </div>
 
-      {{-- ── Quick Stats ──────────────────────────────────────────────── --}}
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="bg-white rounded-xl shadow-lg p-6">
           <div class="flex items-center justify-between mb-4">
@@ -166,7 +121,6 @@
         </div>
       </div>
 
-      {{-- ── Recent Bookings Table ─────────────────────────────────────── --}}
       <div class="bg-white rounded-xl shadow-lg p-6">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-xl font-bold text-gray-900">Recent Bookings</h3>
