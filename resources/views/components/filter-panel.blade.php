@@ -1,13 +1,8 @@
-{{--
-  Component: filter-panel
-  No required props — renders filter sidebar for the Hotels Listing page.
---}}
 <div class="bg-white rounded-xl shadow-lg p-6 space-y-6">
   <div>
     <h3 class="font-semibold text-lg text-gray-900 mb-4">Filters</h3>
   </div>
 
-  {{-- Price Range --}}
   <div class="border-t pt-6">
     <h4 class="font-medium text-gray-900 mb-3">Price Range</h4>
     <div class="space-y-3">
@@ -28,7 +23,6 @@
     </div>
   </div>
 
-  {{-- Star Rating --}}
   <div class="border-t pt-6">
     <h4 class="font-medium text-gray-900 mb-3">Star Rating</h4>
     <div class="space-y-2">
@@ -51,7 +45,6 @@
     </div>
   </div>
 
-  {{-- Amenities --}}
   <div class="border-t pt-6">
     <h4 class="font-medium text-gray-900 mb-3">Amenities</h4>
     <div class="space-y-2">
@@ -84,7 +77,6 @@
     </div>
   </div>
 
-  {{-- Room Capacity --}}
   <div class="border-t pt-6">
     <h4 class="font-medium text-gray-900 mb-3">Room Capacity</h4>
     <div class="space-y-2">
@@ -105,7 +97,6 @@
     </div>
   </div>
 
-  {{-- Reset --}}
   <a
     href="{{ url('/hotels') }}"
     class="block w-full bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium text-center"

@@ -1,10 +1,9 @@
 <footer class="bg-blue-900 text-white mt-auto">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      <!-- Company Info -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <div>
         <div class="flex items-center space-x-2 mb-4">
-          <x-icon name="hotel" class="w-8 h-8" />
+          <img src="{{ url('logo.png') }}" alt="LuxStay" style="height: 2rem; width: auto;" />
           <span class="text-xl font-bold">LuxStay</span>
         </div>
         <p class="text-blue-100 mb-4">
@@ -26,71 +25,15 @@
         </div>
       </div>
 
-      <!-- Quick Links -->
       <div>
         <h3 class="font-semibold text-lg mb-4">Quick Links</h3>
         <ul class="space-y-2">
-          <li>
-            <a href="{{ url('/') }}" class="text-blue-100 hover:text-white transition-colors">
-              Home
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('/hotels') }}" class="text-blue-100 hover:text-white transition-colors">
-              Hotels
-            </a>
-          </li>
-          <li>
-            <a href="{{ url('/dashboard') }}" class="text-blue-100 hover:text-white transition-colors">
-              My Dashboard
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-blue-100 hover:text-white transition-colors">
-              About Us
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-blue-100 hover:text-white transition-colors">
-              Contact
-            </a>
-          </li>
+          <li><a href="{{ url('/') }}" class="text-blue-100 hover:text-white transition-colors">Home</a></li>
+          <li><a href="{{ url('/hotels') }}" class="text-blue-100 hover:text-white transition-colors">Hotels</a></li>
+          <li><a href="{{ url('/dashboard') }}" class="text-blue-100 hover:text-white transition-colors">My Dashboard</a></li>
         </ul>
       </div>
 
-      <!-- Support -->
-      <div>
-        <h3 class="font-semibold text-lg mb-4">Support</h3>
-        <ul class="space-y-2">
-          <li>
-            <a href="#" class="text-blue-100 hover:text-white transition-colors">
-              Help Center
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-blue-100 hover:text-white transition-colors">
-              Terms of Service
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-blue-100 hover:text-white transition-colors">
-              Privacy Policy
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-blue-100 hover:text-white transition-colors">
-              Cookie Policy
-            </a>
-          </li>
-          <li>
-            <a href="#" class="text-blue-100 hover:text-white transition-colors">
-              FAQ
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Contact Info -->
       <div>
         <h3 class="font-semibold text-lg mb-4">Contact Us</h3>
         <ul class="space-y-3">
@@ -100,7 +43,7 @@
           </li>
           <li class="flex items-center space-x-3">
             <x-icon name="phone" class="w-5 h-5 flex-shrink-0" />
-            <span class="text-blue-100">+1 (555) 123-4567</span>
+            <span class="text-blue-100">+20 (101) 0434 465</span>
           </li>
           <li class="flex items-center space-x-3">
             <x-icon name="mail" class="w-5 h-5 flex-shrink-0" />

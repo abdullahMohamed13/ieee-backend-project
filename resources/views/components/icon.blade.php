@@ -1,7 +1,6 @@
 @props(['name', 'class' => ''])
 
 @php
-    // Map custom icon names to Bootstrap Icons
     $iconMap = [
         'hotel' => 'bi-building',
         'menu' => 'bi-list',
@@ -53,6 +52,7 @@
         'twitter' => 'bi-twitter',
         'instagram' => 'bi-instagram',
         'linkedin' => 'bi-linkedin',
+        'lock' => 'bi-lock-fill',
         'waves' => 'bi-water',
         'edit' => 'bi-pencil',
         'filter' => 'bi-funnel',
@@ -61,7 +61,7 @@
         'x-circle' => 'bi-x-circle',
         'xcircle' => 'bi-x-circle',
     ];
-    
+
     $normalizedName = strtolower(trim($name));
     $bootstrapIcon = $iconMap[$normalizedName] ?? 'bi-circle';
     $classes = $class ?: 'bi-icon-default';

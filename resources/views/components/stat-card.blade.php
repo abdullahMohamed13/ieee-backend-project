@@ -1,12 +1,3 @@
-{{--
-  Component: stat-card
-  Props:
-    $title  (string)
-    $value  (string|int)
-    $icon   (string) – icon name passed to x-icon
-    $trend  (array, optional) – ['value' => '12%', 'isPositive' => true]
-    $color  (string, optional) – 'blue' | 'green' | 'purple' | 'orange'
---}}
 @props([
   'title',
   'value',

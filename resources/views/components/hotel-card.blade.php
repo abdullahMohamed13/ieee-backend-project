@@ -1,8 +1,3 @@
-{{--
-  Component: hotel-card
-  Props:
-    $hotel (array|object) – hotel data
---}}
 @props(['hotel'])
 
 <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
@@ -20,7 +15,6 @@
   </div>
 
   <div class="p-5">
-    {{-- Name & Rating --}}
     <div class="flex justify-between items-start mb-2">
       <h3 class="text-xl font-semibold text-gray-900">{{ $hotel['name'] }}</h3>
       <div class="flex items-center space-x-1">
@@ -30,13 +24,11 @@
       </div>
     </div>
 
-    {{-- Location --}}
     <div class="flex items-center text-gray-600 mb-3">
       <x-icon name="map-pin" class="w-4 h-4 mr-1" />
       <span class="text-sm">{{ $hotel['location'] }}</span>
     </div>
 
-    {{-- Amenity Icons --}}
     <div class="flex items-center space-x-2 mb-4">
       @php
         $amenityIcons = [
@@ -62,7 +54,6 @@
       @endif
     </div>
 
-    {{-- Price & CTA --}}
     <div class="flex justify-between items-center pt-4 border-t">
       <div>
         <p class="text-sm text-gray-600">Starting from</p>
@@ -70,12 +61,7 @@
           ${{ $hotel['price'] }}<span class="text-sm font-normal text-gray-600">/night</span>
         </p>
       </div>
-      <a
-        href="{{ url('/hotels/' . $hotel['id']) }}"
-        class="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition-colors"
-      >
-        View Details
-      </a>
+      <x-button href="{{ url('/hotels/' . $hotel['id']) }}" variant="primary">View Details</x-button>
     </div>
   </div>
 </div>
