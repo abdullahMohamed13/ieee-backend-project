@@ -47,13 +47,13 @@ class HomeController extends Controller
                 'id'     => 'd3',
                 'name'   => 'Los Angeles',
                 'hotels' => Hotel::where('city', 'Los Angeles')->where('is_active', true)->count(),
-                'image'  => 'https://images.unsplash.com/photo-1534190239940-9ba8944ea261?w=800',
+                'image'  => 'https://images.unsplash.com/photo-1506812574058-fc75fa93fead?w=800',
             ],
             [
                 'id'     => 'd4',
                 'name'   => 'Chicago',
                 'hotels' => Hotel::where('city', 'Chicago')->where('is_active', true)->count(),
-                'image'  => 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800',
+                'image'  => 'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=800',
             ],
         ];
 
