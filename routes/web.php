@@ -33,8 +33,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 
     // Forgot Password
-    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
-    Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
+    // Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    // Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
 });
 
 // Logout
