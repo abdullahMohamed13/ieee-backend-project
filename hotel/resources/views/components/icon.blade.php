@@ -1,0 +1,70 @@
+@props(['name', 'class' => ''])
+
+@php
+    // Map custom icon names to Bootstrap Icons
+    $iconMap = [
+        'hotel' => 'bi-building',
+        'menu' => 'bi-list',
+        'user' => 'bi-person',
+        'log-out' => 'bi-box-arrow-right',
+        'logout' => 'bi-box-arrow-right',
+        'layout-dashboard' => 'bi-grid',
+        'layoutdashboard' => 'bi-grid',
+        'mail' => 'bi-envelope',
+        'phone' => 'bi-telephone',
+        'map-pin' => 'bi-geo-alt',
+        'mappin' => 'bi-geo-alt',
+        'star' => 'bi-star-fill',
+        'award' => 'bi-award',
+        'shield' => 'bi-shield-check',
+        'headphones' => 'bi-headphones',
+        'calendar' => 'bi-calendar',
+        'users' => 'bi-people',
+        'dollar-sign' => 'bi-currency-dollar',
+        'dollarsign' => 'bi-currency-dollar',
+        'wifi' => 'bi-wifi',
+        'utensils' => 'bi-cup-straw',
+        'dumbbell' => 'bi-heart-pulse',
+        'chevron-left' => 'bi-chevron-left',
+        'chevronleft' => 'bi-chevron-left',
+        'chevron-right' => 'bi-chevron-right',
+        'chevronright' => 'bi-chevron-right',
+        'sliders-horizontal' => 'bi-sliders',
+        'slidershorizontal' => 'bi-sliders',
+        'bed' => 'bi-house-door',
+        'trending-up' => 'bi-graph-up-arrow',
+        'trendingup' => 'bi-graph-up-arrow',
+        'plus' => 'bi-plus',
+        'trash-2' => 'bi-trash',
+        'trash2' => 'bi-trash',
+        'search' => 'bi-search',
+        'image' => 'bi-image',
+        'eye' => 'bi-eye',
+        'check' => 'bi-check',
+        'x' => 'bi-x',
+        'sparkles' => 'bi-stars',
+        'car' => 'bi-car-front',
+        'heart' => 'bi-heart',
+        'settings' => 'bi-gear',
+        'clock' => 'bi-clock',
+        'credit-card' => 'bi-credit-card',
+        'creditcard' => 'bi-credit-card',
+        'facebook' => 'bi-facebook',
+        'twitter' => 'bi-twitter',
+        'instagram' => 'bi-instagram',
+        'linkedin' => 'bi-linkedin',
+        'waves' => 'bi-water',
+        'edit' => 'bi-pencil',
+        'filter' => 'bi-funnel',
+        'check-circle' => 'bi-check-circle',
+        'checkcircle' => 'bi-check-circle',
+        'x-circle' => 'bi-x-circle',
+        'xcircle' => 'bi-x-circle',
+    ];
+    
+    $normalizedName = strtolower(trim($name));
+    $bootstrapIcon = $iconMap[$normalizedName] ?? 'bi-circle';
+    $classes = $class ?: 'bi-icon-default';
+@endphp
+
+<i class="bi {{ $bootstrapIcon }} {{ $classes }}" {{ $attributes }}></i>
