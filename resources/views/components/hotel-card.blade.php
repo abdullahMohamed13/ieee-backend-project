@@ -1,101 +1,81 @@
 {{--
-    resources/views/components/hotel-card.blade.php
-    Mirrors: src/app/components/HotelCard.tsx
-
-    Usage:
-        @foreach($hotels as $hotel)
-            @include('components.hotel-card', ['hotel' => $hotel])
-        @endforeach
-
-    Expected $hotel object/array keys:
-        id, name, location, rating, price, image, amenities (array), featured (bool)
+  Component: hotel-card
+  Props:
+    $hotel (array|object) – hotel data
 --}}
+@props(['hotel'])
+
 <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-    {{-- Image --}}
-    <div class="relative h-48 overflow-hidden">
-        <img
-            src="{{ Str::startsWith($hotel['image'] ?? $hotel->image ?? '', ['http://', 'https://']) ? ($hotel['image'] ?? $hotel->image) : asset('storage/' . ($hotel['image'] ?? $hotel->image)) }}"
-            alt="{{ $hotel['name'] ?? $hotel->name }}"
-            class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-        />
-        @if($hotel['featured'] ?? $hotel->featured ?? false)
-        <span class="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-            Featured
-        </span>
-        @endif
+  <div class="relative h-48 overflow-hidden">
+    <img
+      src="{{ $hotel['image'] }}"
+      alt="{{ $hotel['name'] }}"
+      class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+    />
+    @if($hotel['featured'] ?? false)
+      <span class="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+        Featured
+      </span>
+    @endif
+  </div>
+
+  <div class="p-5">
+    {{-- Name & Rating --}}
+    <div class="flex justify-between items-start mb-2">
+      <h3 class="text-xl font-semibold text-gray-900">{{ $hotel['name'] }}</h3>
+      <div class="flex items-center space-x-1">
+        @for($i = 0; $i < ($hotel['rating'] ?? 0); $i++)
+          <x-icon name="star" class="w-4 h-4 fill-yellow-400 text-yellow-400" />
+        @endfor
+      </div>
     </div>
 
-    {{-- Card Body --}}
-    <div class="p-5">
-        <div class="flex justify-between items-start mb-2">
-            <h3 class="text-xl font-semibold text-gray-900">{{ $hotel['name'] ?? $hotel->name }}</h3>
-            <div class="flex items-center space-x-1">
-                @for($i = 0; $i < ($hotel['rating'] ?? $hotel->rating ?? 0); $i++)
-                <svg class="w-4 h-4 fill-yellow-400 text-yellow-400" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-                @endfor
-            </div>
-        </div>
-
-        <div class="flex items-center text-gray-600 mb-3">
-            <i data-lucide="map-pin" class="w-4 h-4 mr-1"></i>
-            <span class="text-sm">{{ $hotel['location'] ?? $hotel->location }}</span>
-        </div>
-
-        {{-- Amenity Icons --}}
-        @php
-            $amenities = $hotel['amenities'] ?? $hotel->amenities ?? [];
-            $amenityIcons = [
-                'WiFi'       => 'wifi',
-                'Restaurant' => 'utensils',
-                'Gym'        => 'dumbbell',
-                'Pool'       => 'waves',
-                'Parking'    => 'car',
-                'Spa'        => 'sparkles',
-            ];
-        @endphp
-        <div class="flex items-center space-x-2 mb-4">
-            @foreach(array_slice((array)$amenities, 0, 4) as $amenity)
-            <div class="flex items-center space-x-1 text-gray-600" title="{{ $amenity }}">
-                @if(isset($amenityIcons[$amenity]))
-                <i data-lucide="{{ $amenityIcons[$amenity] }}" class="w-4 h-4"></i>
-                @endif
-            </div>
-            @endforeach
-            @if(count((array)$amenities) > 4)
-            <span class="text-sm text-gray-500">+{{ count((array)$amenities) - 4 }} more</span>
-            @endif
-        </div>
-
-        {{-- Price + CTA --}}
-        <div class="flex justify-between items-center pt-4 border-t">
-            <div>
-                <p class="text-sm text-gray-600">Starting from</p>
-                <p class="text-2xl font-bold text-blue-900">
-                    ${{ $hotel['price'] ?? $hotel->price }}
-                    <span class="text-sm font-normal text-gray-600">/night</span>
-                </p>
-            </div>
-            <x-button href="{{ url('/hotels/' . ($hotel['id'] ?? $hotel->id)) }}" size="sm">View Details</x-button>
-        </div>
-
-        {{-- admin control to edit and delete hotel --}}
-        @if(auth()->check() && auth()->user()->is_admin)
-        <div class="flex justify-end items-center space-x-4 pt-3 mt-3 border-t border-gray-100">
-            <a href="{{ route('hotels.edit', $hotel['id'] ?? $hotel->id) }}" 
-               class="text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center">
-                <i data-lucide="edit-2" class="w-4 h-4 mr-1"></i> Edit
-            </a>
-            
-            <form action="{{ route('hotels.destroy', $hotel['id'] ?? $hotel->id) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this hotel?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-800 flex items-center">
-                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
-                </button>
-            </form>
-        </div>
-        @endif
+    {{-- Location --}}
+    <div class="flex items-center text-gray-600 mb-3">
+      <x-icon name="map-pin" class="w-4 h-4 mr-1" />
+      <span class="text-sm">{{ $hotel['location'] }}</span>
     </div>
+
+    {{-- Amenity Icons --}}
+    <div class="flex items-center space-x-2 mb-4">
+      @php
+        $amenityIcons = [
+          'WiFi'       => 'wifi',
+          'Restaurant' => 'utensils',
+          'Gym'        => 'dumbbell',
+          'Pool'       => 'waves',
+        ];
+        $amenities = array_slice($hotel['amenities'] ?? [], 0, 4);
+        $extra     = count($hotel['amenities'] ?? []) - 4;
+      @endphp
+
+      @foreach($amenities as $amenity)
+        @if(isset($amenityIcons[$amenity]))
+          <div class="flex items-center space-x-1 text-gray-600" title="{{ $amenity }}">
+            <x-icon name="{{ $amenityIcons[$amenity] }}" class="w-4 h-4" />
+          </div>
+        @endif
+      @endforeach
+
+      @if($extra > 0)
+        <span class="text-sm text-gray-500">+{{ $extra }} more</span>
+      @endif
+    </div>
+
+    {{-- Price & CTA --}}
+    <div class="flex justify-between items-center pt-4 border-t">
+      <div>
+        <p class="text-sm text-gray-600">Starting from</p>
+        <p class="text-2xl font-bold text-blue-900">
+          ${{ $hotel['price'] }}<span class="text-sm font-normal text-gray-600">/night</span>
+        </p>
+      </div>
+      <a
+        href="{{ url('/hotels/' . $hotel['id']) }}"
+        class="bg-blue-900 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition-colors"
+      >
+        View Details
+      </a>
+    </div>
+  </div>
 </div>

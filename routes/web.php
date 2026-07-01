@@ -1,43 +1,69 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HotelController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\HotelsController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 
-Route::get('/', [HomeController::class, 'index']);
+// ═══════════════════════════════════════════════════════════════════════════
+// PUBLIC ROUTES
+// ═══════════════════════════════════════════════════════════════════════════
 
-//hotel routes
-Route::get('/hotels', [HotelsController::class, 'index'])->name('hotels.index');
-Route::get('/hotels/create', [HotelsController::class, 'create'])->name('hotels.create');
-Route::post('/hotels', [HotelsController::class, 'store'])->name('hotels.store');
-Route::get('/hotels/{id}', [HotelsController::class, 'show'])->name('hotels.show');
-Route::get('/hotels/{id}/edit', [HotelsController::class, 'edit'])->name('hotels.edit');
-Route::put('/hotels/{id}', [HotelsController::class, 'update'])->name('hotels.update');
-Route::delete('/hotels/{id}', [HotelsController::class, 'destroy'])->name('hotels.destroy');
+// Home
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/booking/{id}', [BookingController::class, 'create'])->name('booking.create');
-Route::post('/booking/{id}', [BookingController::class, 'store'])->name('booking.store');
+// Hotels
+Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
+Route::get('/hotels/{id}', [HotelController::class, 'show'])->name('hotels.show');
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+// ═══════════════════════════════════════════════════════════════════════════
+// AUTHENTICATION ROUTES
+// ═══════════════════════════════════════════════════════════════════════════
 
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
+Route::middleware('guest')->group(function () {
+    // Login
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    // Register
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+
+    // Forgot Password
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
+});
+
+// Logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PROTECTED USER ROUTES
+// ═══════════════════════════════════════════════════════════════════════════
 
 Route::middleware('auth')->group(function () {
+    // Booking
+    Route::get('/booking/{hotelId}', [BookingController::class, 'show'])->name('booking.show');
+    Route::post('/booking/{hotelId}/confirm', [BookingController::class, 'confirm'])->name('booking.confirm');
+    Route::post('/booking/{id}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+
+    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/hotels', [AdminController::class, 'hotels'])->name('admin.hotels');
-    Route::get('/admin/rooms', [AdminController::class, 'rooms'])->name('admin.rooms');
-    Route::get('/admin/bookings', [AdminController::class, 'bookings'])->name('admin.bookings');
+    Route::put('/dashboard/profile', [DashboardController::class, 'updateProfile'])->name('dashboard.profile.update');
+    Route::put('/dashboard/password', [DashboardController::class, 'updatePassword'])->name('dashboard.password.update');
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ADMIN ROUTES
+// ═══════════════════════════════════════════════════════════════════════════
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    // Admin Dashboard
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    
+    // TODO: Add CRUD routes for hotels, rooms, bookings, users
+    // These would be implemented similarly to the dashboard
 });

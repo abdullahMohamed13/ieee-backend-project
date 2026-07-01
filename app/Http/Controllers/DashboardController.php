@@ -2,71 +2,105 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
+use App\Models\Hotel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
 class DashboardController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        $bookings = [
-            [
-                'id' => 'b1',
-                'hotel_id' => 1,
-                'hotel_name' => 'Grand Luxury Hotel',
-                'room_type' => 'Deluxe King',
-                'check_in' => '2026-07-15',
-                'check_out' => '2026-07-18',
-                'guests' => 2,
-                'total_price' => 897,
-                'status' => 'confirmed',
-                'user_name' => 'John Smith',
-                'user_email' => 'john.smith@example.com',
-            ],
-            [
-                'id' => 'b2',
-                'hotel_id' => 2,
-                'hotel_name' => 'Seaside Resort & Spa',
-                'room_type' => 'Ocean View Room',
-                'check_in' => '2026-08-01',
-                'check_out' => '2026-08-05',
-                'guests' => 2,
-                'total_price' => 1396,
-                'status' => 'pending',
-                'user_name' => 'Sarah Johnson',
-                'user_email' => 'sarah.j@example.com',
-            ],
-            [
-                'id' => 'b3',
-                'hotel_id' => 3,
-                'hotel_name' => 'Mountain View Lodge',
-                'room_type' => 'Mountain View Room',
-                'check_in' => '2026-07-20',
-                'check_out' => '2026-07-23',
-                'guests' => 3,
-                'total_price' => 567,
-                'status' => 'confirmed',
-                'user_name' => 'Michael Brown',
-                'user_email' => 'm.brown@example.com',
-            ],
-            [
-                'id' => 'b4',
-                'hotel_id' => 7,
-                'hotel_name' => 'Coastal Paradise Hotel',
-                'room_type' => 'Beach Suite',
-                'check_in' => '2026-09-10',
-                'check_out' => '2026-09-15',
-                'guests' => 4,
-                'total_price' => 1595,
-                'status' => 'confirmed',
-                'user_name' => 'Emily Davis',
-                'user_email' => 'emily.d@example.com',
-            ],
-        ];
+        $this->middleware('auth');
+    }
 
-        $hotels = (new HotelsController)->getHotels();
-        $favoriteHotels = array_slice($hotels, 0, 3);
+    public function index(Request $request)
+    {
+        $user = auth()->user();
+        $activeTab = $request->get('tab', 'bookings');
 
-        return view('dashboard.index', [
-            'bookings' => $bookings,
-            'favoriteHotels' => $favoriteHotels,
+        // Get user's bookings
+        $bookings = Booking::where('user_id', $user->id)
+            ->with(['hotel'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($booking) {
+                return [
+                    'id'         => 'b' . $booking->id,
+                    'hotelId'    => $booking->hotel_id,
+                    'hotelName'  => $booking->hotel->name ?? 'N/A',
+                    'roomType'   => $booking->room_type,
+                    'checkIn'    => $booking->check_in->format('Y-m-d'),
+                    'checkOut'   => $booking->check_out->format('Y-m-d'),
+                    'guests'     => $booking->guests,
+                    'totalPrice' => $booking->total_price,
+                    'status'     => $booking->status,
+                    'userName'   => $booking->guest_name,
+                    'userEmail'  => $booking->email,
+                ];
+            });
+
+        // Get favorite hotels (static for now - would normally be a favorites table)
+        $favoriteHotels = Hotel::where('featured', true)
+            ->where('is_active', true)
+            ->limit(3)
+            ->get()
+            ->map(function ($hotel) {
+                return [
+                    'id'       => $hotel->id,
+                    'name'     => $hotel->name,
+                    'location' => $hotel->location,
+                    'price'    => $hotel->price,
+                    'image'    => $hotel->image,
+                ];
+            });
+
+        return view('pages.dashboard', compact('bookings', 'favoriteHotels', 'activeTab'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'email'      => 'required|email|unique:users,email,' . $user->id,
+            'phone'      => 'nullable|string',
+            'address'    => 'nullable|string',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $user->update($request->only(['first_name', 'last_name', 'email', 'phone', 'address']));
+
+        return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'current_password'     => 'required',
+            'password'             => 'required|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $user = auth()->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->back()->with('success', 'Password updated successfully.');
     }
 }
