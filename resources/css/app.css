@@ -1,6 +1,50 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
+@import url('https://fonts.bunny.net/css?family=poppins:300,400,500,600,700');
 
 /* Custom styles for LuxStay */
+
+@font-face {
+  font-family: 'MADETommy';
+  src: url('/fonts/MADETommy-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADETommy';
+  src: url('/fonts/MADETommy-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADETommy';
+  src: url('/fonts/MADETommy-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADETommy';
+  src: url('/fonts/MADETommy-ExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADETommy';
+  src: url('/fonts/MADETommy-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADETommy';
+  src: url('/fonts/MADETommy-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
 :root {
     --primary-color: #1e3a8a;
     --primary-light: #3b82f6;
@@ -12,8 +56,13 @@
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Poppins', sans-serif;
     line-height: 1.6;
+}
+
+a, button, .btn, [role="button"], input[type="submit"], input[type="button"] {
+  text-decoration: none !important;
+  transition: all 0.2s ease;
 }
 
 /* Button styles */
@@ -114,8 +163,12 @@ body {
 .absolute { position: absolute; }
 .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'MADETommy', sans-serif;
+}
+
 /* Height */
-.h-full { height: 100%; }
+h-full { height: 100%; }
 .h-\[600px\] { height: 600px; }
 .h-\[500px\] { height: 500px; }
 .h-\[120px\] { height: 120px; }
@@ -210,6 +263,8 @@ body {
 .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
 .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.col-span-full { grid-column: 1 / -1; }
+.justify-items-center { justify-items: center; }
 .gap-2 { gap: 0.5rem; }
 .gap-3 { gap: 0.75rem; }
 .gap-4 { gap: 1rem; }
@@ -320,6 +375,10 @@ body {
 .min-w-\[200px\] { min-width: 200px; }
 .sticky { position: sticky; }
 .top-24 { top: 6rem; }
+.top-1\/2 { top: 50%; }
+.left-3 { left: 0.75rem; }
+.transform { transform: translateY(-50%); }
+.-translate-y-1\/2 { transform: translateY(-50%); }
 .last\:border-b-0:last-child { border-bottom-width: 0; }
 
 /* Focus states */
